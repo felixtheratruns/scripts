@@ -56,17 +56,6 @@ module.exports = function move(oldPath, newPath, callback) {
     }
 }
 
-
-
-//const read = (dir) =>
-//  fs.readdirSync(dir)
-//    .reduce((files, file) =>
-//      fs.statSync(path.join(dir, file)).isDirectory() ?
-//        files.concat(read(path.join(dir, file))) :
-//        files.concat(path.join(dir, file)),
-//      []);
-//
-
 const FileSystem = require('fs');
 const Path = require('path');
 
@@ -282,81 +271,3 @@ for (var i = 0; i < copy_groups.length; i++){
 	output = sh.exec(copy_group_string, {silent:true}).stdout;
 	copy_group_string = "";
 }
-
-//			exec(exec_var, (err, stdout, stderr) => {
-//			if (err) {
-//			// node couldn't execute the command
-//				return;
-//			}
-//			var std_out = `${stdout}`;
-//			if (std_out < 300){
-//				long_enough = true;	
-//			}
-//			// the *entire* stdout and stderr (buffered)
-//			console.log(`stdout: ${stdout}`);
-//			console.log(`stderr: ${stderr}`);
-//		});
-//
-//
-//for (var i = 0; i < sources.length; i++) {
-//	for (var j = i+1; j < dests.length; j++) {
-//		exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo. >> output_diffs && echo "'+' diff of ' + sources[i] + ' and ' + dests[j] + '" >> output_diffs';
-//		exec(exec_var, (err, stdout, stderr) => {
-//			if (err) {
-//			// node couldn't execute the command
-//				return;
-//			}
-//
-//			// the *entire* stdout and stderr (buffered)
-//			console.log(`stdout: ${stdout}`);
-//			console.log(`stderr: ${stderr}`);
-//
-//			console.log('diff "' + names[sources[i]][0] + '" "' + names[dests[j]][0] + '" >> output_diffs');
-//			exec_var = 'diff "' + names[sources[i]][0] + '" "' + names[dests[j]][0] + '" >> output_diffs';
-//			exec(exec_var, (err, stdout, stderr) => {
-//				if (err) {
-//				// node couldn't execute the command
-//					return;
-//				}
-//
-//				// the *entire* stdout and stderr (buffered)
-//				console.log(`stdout: ${stdout}`);
-//				console.log(`stderr: ${stderr}`);
-//			});
-//		});
-//	}
-//}
-//      
-//
-//      
-//
-//		var absolutePath1 =path.resolve(names[sources[i]][0]);
-//		fs.readFile(absolutePath1, 'utf8', function(err, data1) {  
-//	    		if (err) throw err;
-//	    		var absolutePath2 =path.resolve(names[dests[j]][0]);
-//			fs.readFile(absolutePath2, 'utf8', function(err, data2) {  
-//	    			if (err) throw err;
-//
-//
-//
-//			});
-//
-//		});
-
-//var group_count = 0;	
-//			if 
-//			for (group in copy_groups){		
-//				if(sources[i] in copy_group[group] ){
-//					copy_groups[group]			
-//				} else {
-//					
-//				}
-//	
-//				if(dests[i] in copy_group[group]){
-//					copy_groups[group]			
-//				} else {
-//	
-//				}
-//			}
-//
-//
