@@ -98,14 +98,14 @@ var broken = false;
 var new_array = [];
 
 for(var key in names){
-    console.log("key" + " : " + names[key]);
+    console.log(key + ":key-names: " + names[key]);
 	new_array = [];
 	broken = false;	
 	
 	new_array = [];
 	for (var i = 0; i < names[key].length; i++){
-		if (names[key][i].endsWith('.js')){
-			new_array = names[key].filter(function(a){return a.endsWith('.js');});
+		if (names[key][i].toLowerCase().endsWith('.js')){
+			new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.js');});
 			names[key] = new_array;
 			broken = true;	
 			break;	
@@ -115,8 +115,8 @@ for(var key in names){
 	if (!broken){
 		new_array = [];
 		for (var i = 0; i < names[key].length; i++){
-			if (names[key][i].endsWith('.html')){
-				new_array = names[key].filter(function(a){return a.endsWith('.html');});
+			if (names[key][i].toLowerCase().endsWith('.html')){
+				new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.html');});
 				names[key] = new_array;
 			    broken = true;	
 				break;	
@@ -127,8 +127,8 @@ for(var key in names){
 	if (!broken){
 		new_array = [];
 		for (var i = 0; i < names[key].length; i++){
-			if (names[key][i].endsWith('.txt')){
-				new_array = names[key].filter(function(a){return a.endsWith('.txt');});
+			if (names[key][i].toLowerCase().endsWith('.txt')){
+				new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.txt');});
 				names[key] = new_array;
 			    broken = true;	
 				break;	
@@ -139,7 +139,7 @@ for(var key in names){
 
 
 for(var key in names){
-	console.log(key + " : " + names[key]);
+	console.log(key + "1 : " + names[key]);
 //	var absolutePath =path.resolve(names[key][0]);
 //	console.log(absolutePath);	
 //	fs.readFile(absolutePath, 'utf8', function(err, data) {  
@@ -169,67 +169,70 @@ for (var i = 0; i < sources.length; i++) {
 	for (var j = i+1; j < dests.length; j++) {
 		//console.log(names[sources[i]][0]);
 		//console.log(names[dests[j]][0]);
-		exec_var = 'diff "' + names[sources[i]][0] + '" "' + names[dests[j]][0] + '" | wc -l'
-		output = sh.exec(exec_var, {silent:true}).stdout;
-		if (output < 20){
-
-			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][0] + ' >> output_diffs && echo ' + names[dests[j]][0] + ' >> output_diffs && echo diff "' + names[sources[i]][0] + '" "' + names[dests[j]][0] + '" >> output_diffs';
-			output = sh.exec(exec_var, {silent:true}).stdout;
-		
-			exec_var = 'diff "' + names[sources[i]][0] + '" "' + names[dests[j]][0] + '" >> output_diffs';
-			output = sh.exec(exec_var, {silent:true}).stdout;
-			output = "";	
-			
-			var source_in_existing = false;		
-			var source_index = 0;	
-			var dest_in_existing = false;			
-			var dest_index = 0;	
-			for (var k = 0; k < copy_groups.length; k++){		
-				for (var a = 0; a < copy_groups[k].length; a++){
-					console.log(a + "copy_group: " + copy_groups[k][a]);		
-				}
-				if(copy_groups[k].indexOf(sources[i]) > -1){
-					console.log(sources[i] + " is in group ");
-					source_in_existing = true;	
-					source_index = k; 
-				} 
-					
-				if(copy_groups[k].indexOf(dests[j]) > -1 ){
-					console.log(dests[j] + " is in group ");
-					dest_in_existing = true;
-					dest_index = k;	
-				}
-			}
-
-			if ( dest_index == source_index && source_in_existing && dest_in_existing ){
-				continue;
-			}
-			console.log("in less than: " + sources[i] + " : " + dests[j]);
-			if ( source_in_existing && dest_in_existing ){
-				var replace_group = copy_groups[dest_index];
-				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + replace_group +");");
-				Array.prototype.push.apply(copy_groups[source_index],replace_group);
-				console.log("copy_groups.splice("+dest_index + "," + 1 +");");
-				copy_groups.splice(dest_index, 1);	
-			} else if ( source_in_existing ){
-				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + [dests[j]] + ");");
-				Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
-			} else if ( dest_in_existing ){
-				console.log("Array.prototype.push.apply("+copy_groups[dest_index] + "," + [sources[i]] + ");");
-				Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
-
-			} else if ( !source_in_existing && !dest_in_existing ){
-				console.log("copy_groups.push(["+sources[i] + "]);");
-				var tmp = [sources[i]];
-				copy_groups.push([sources[i]]);
-				console.log(copy_groups.length-1);
-				var num = copy_groups.length-1;
-				console.log(">>copy_groups["+(copy_groups.length-1)+">>].push("+dests[j]+");");
-				copy_groups[copy_groups.length-1].push(dests[j]);
-			} else {
-				throw new Error("copy groups not working");
-			}
-
+        for(var m=0; m < names[sources[i]].length; m++){
+            for(var n=0; n < names[dests[j]].length; n++){
+        		exec_var = 'diff --ignore-all-space --ignore-blank-lines "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
+        		output = sh.exec(exec_var, {silent:true}).stdout;
+        		if (output < 20){
+        
+        			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo diff "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+        			output = sh.exec(exec_var, {silent:true}).stdout;
+        		
+        			exec_var = 'diff --ignore-all-space --ignore-blank-lines "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+        			output = sh.exec(exec_var, {silent:true}).stdout;
+        			output = "";	
+        			
+        			var source_in_existing = false;		
+        			var source_index = 0;	
+        			var dest_in_existing = false;			
+        			var dest_index = 0;	
+        			for (var k = 0; k < copy_groups.length; k++){		
+        				for (var a = 0; a < copy_groups[k].length; a++){
+        					console.log(a + "copy_group: " + copy_groups[k][a]);		
+        				}
+        				if(copy_groups[k].indexOf(sources[i]) > -1){
+        					console.log(sources[i] + " is in group ");
+        					source_in_existing = true;	
+        					source_index = k; 
+        				} 
+        					
+        				if(copy_groups[k].indexOf(dests[j]) > -1 ){
+        					console.log(dests[j] + " is in group ");
+        					dest_in_existing = true;
+        					dest_index = k;	
+        				}
+        			}
+        
+        			if ( dest_index == source_index && source_in_existing && dest_in_existing ){
+        				continue;
+        			}
+        			console.log("in less than: " + sources[i] + " : " + dests[j]);
+        			if ( source_in_existing && dest_in_existing ){
+        				var replace_group = copy_groups[dest_index];
+        				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + replace_group +");");
+        				Array.prototype.push.apply(copy_groups[source_index],replace_group);
+        				console.log("copy_groups.splice("+dest_index + "," + 1 +");");
+        				copy_groups.splice(dest_index, 1);	
+        			} else if ( source_in_existing ){
+        				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + [dests[j]] + ");");
+        				Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
+        			} else if ( dest_in_existing ){
+        				console.log("Array.prototype.push.apply("+copy_groups[dest_index] + "," + [sources[i]] + ");");
+        				Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
+        
+        			} else if ( !source_in_existing && !dest_in_existing ){
+        				console.log("copy_groups.push(["+sources[i] + "]);");
+        				var tmp = [sources[i]];
+        				copy_groups.push([sources[i]]);
+        				console.log(copy_groups.length-1);
+        				var num = copy_groups.length-1;
+        				console.log(">>copy_groups["+(copy_groups.length-1)+">>].push("+dests[j]+");");
+        				copy_groups[copy_groups.length-1].push(dests[j]);
+        			} else {
+        				throw new Error("copy groups not working");
+        			}
+                }
+            }
 		}				
 	}
 }
