@@ -3,13 +3,13 @@
 //   нThis program is free software: you can redistribute it and/or modify н
 //   нit under the terms of the GNU General Public License as published by н
 //   нthe Free Software Foundation, either version 3 of the License, or	   н
-//   н(at your option) any later version.				   н
-//   н									   н
+//   н(at your option) any later version.				                   н
+//   н									                                   н
 //   нThis program is distributed in the hope that it will be useful,      н
 //   нbut WITHOUT ANY WARRANTY; without even the implied warranty of       н
 //   нMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        н
-//   нGNU General Public License for more details.			   н
-//   н									   н
+//   нGNU General Public License for more details.			               н
+//   н									                                   н
 //   нYou should have received a copy of the GNU General Public License	   н
 //   нalong with this program.  If not, see <http://www.gnu.org/licenses/>.н
 //   ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
@@ -19,6 +19,7 @@
 //   However there is some work that needs to be done before this program 
 //   can be used for more general purposes.
 
+var myArgs = process.argv.slice(2);
 
 
 const fs = require('fs')
@@ -65,13 +66,13 @@ function readDirR(dir) {
         : dir;
 }
 
-files = readDirR('cookie_input');
+files = readDirR(myArgs[0]);
 
 var text = ''
 
 var names = {};
 for (var i = 0; i < files.length; i++ ){
-	if (files[i] == 'script.js'){
+	if (files[i] == '.compare_files.js'){
 		continue;
 	}	
 	var line = files[i];
@@ -82,7 +83,7 @@ for (var i = 0; i < files.length; i++ ){
 	}else {
 		names[name] = [line];
 	}
-	//console.log(files[i]);		
+	console.log(files[i]);		
 }
 
 function remove(array, element){
@@ -92,43 +93,15 @@ function remove(array, element){
     }
 }
 
+
 var broken = false;
 var new_array = [];
+
 for(var key in names){
+    console.log("key" + " : " + names[key]);
 	new_array = [];
 	broken = false;	
-	for (var i = 0; i < names[key].length; i++){
-		if (names[key][i].includes('Revision 4')){
-			new_array = names[key].filter(function(a){return a.includes('Revision 4');});
-			names[key] = new_array;
-			broken = true;
-			break;
-		} 
-	}
- 	if (!broken){
-		broken = false;
-		new_array = [];
-		for (var i = 0; i < names[key].length; i++){
-			if (names[key][i].includes('Revision 3')){
-				new_array = names[key].filter(function(a){return a.includes('Revision 3');});
-				names[key] = new_array;
-				broken = true;
-				break;
-			} 
-		}
-		if (!broken){
-			new_array = [];
-			for (var i = 0; i < names[key].length; i++){
-				if (names[key][i].includes('Revision 2')){
-					new_array = names[key].filter(function(a){return a.includes('Revision 2');});
-					names[key] = new_array;
-					break;
-				}
-			}
-		}	
-	}
-
-	broken = false;
+	
 	new_array = [];
 	for (var i = 0; i < names[key].length; i++){
 		if (names[key][i].endsWith('.js')){
@@ -145,11 +118,23 @@ for(var key in names){
 			if (names[key][i].endsWith('.html')){
 				new_array = names[key].filter(function(a){return a.endsWith('.html');});
 				names[key] = new_array;
+			    broken = true;	
 				break;	
 			}	
 		}
 	}
 
+	if (!broken){
+		new_array = [];
+		for (var i = 0; i < names[key].length; i++){
+			if (names[key][i].endsWith('.txt')){
+				new_array = names[key].filter(function(a){return a.endsWith('.txt');});
+				names[key] = new_array;
+			    broken = true;	
+				break;	
+			}	
+		}
+	}
 }
 
 
