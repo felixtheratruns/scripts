@@ -1,1 +1,5 @@
-folder/
+*
+!.add_file_to_hosts.js
+!.compare_files.js
+!.gitignore
+!.merge_hosts_files_wo_repeats.py

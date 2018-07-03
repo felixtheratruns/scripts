@@ -83,7 +83,6 @@ for (var i = 0; i < files.length; i++ ){
 	}else {
 		names[name] = [line];
 	}
-	console.log(files[i]);		
 }
 
 function remove(array, element){
@@ -93,63 +92,53 @@ function remove(array, element){
     }
 }
 
-
 var broken = false;
 var new_array = [];
 
 for(var key in names){
-    console.log(key + ":key-names: " + names[key]);
-	new_array = [];
-	broken = false;	
-	
-	new_array = [];
-	for (var i = 0; i < names[key].length; i++){
-		if (names[key][i].toLowerCase().endsWith('.js')){
-			new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.js');});
-			names[key] = new_array;
-			broken = true;	
-			break;	
-		}
-
-	}
-	if (!broken){
-		new_array = [];
-		for (var i = 0; i < names[key].length; i++){
-			if (names[key][i].toLowerCase().endsWith('.html')){
-				new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.html');});
-				names[key] = new_array;
-			    broken = true;	
-				break;	
-			}	
-		}
-	}
-
-	if (!broken){
-		new_array = [];
-		for (var i = 0; i < names[key].length; i++){
-			if (names[key][i].toLowerCase().endsWith('.txt')){
-				new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.txt');});
-				names[key] = new_array;
-			    broken = true;	
-				break;	
-			}	
-		}
-	}
+    broken = false;
+    new_array = [];
+    for (var i = 0; i < names[key].length; i++){
+        if (names[key][i].toLowerCase().endsWith('.js')){
+            new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.js');});
+            names[key] = new_array;
+            broken = true;  
+            break;  
+        }
+    }
+    if (!broken){
+        new_array = [];
+        for (var i = 0; i < names[key].length; i++){
+            if (names[key][i].toLowerCase().endsWith('.html')){
+                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.html');});
+                names[key] = new_array;
+                broken = true;  
+                break;  
+            }   
+        }
+    }
+    if (!broken){
+        new_array = [];
+        for (var i = 0; i < names[key].length; i++){
+            if (names[key][i].toLowerCase().endsWith('.txt')){
+                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.txt');});
+                names[key] = new_array;
+                broken = true;  
+                break;  
+            }   
+        }
+    }
 }
 
 
 for(var key in names){
 	console.log(key + "1 : " + names[key]);
 //	var absolutePath =path.resolve(names[key][0]);
-//	console.log(absolutePath);	
 //	fs.readFile(absolutePath, 'utf8', function(err, data) {  
 //	    if (err) throw err;
 //		var diff = jsdiff.diffLines(data,data);
-//	    	console.log(diff);
 //		var diff = jsdiff.diffLines(data,"this is crazy");
-//	    	console.log(diff);
 //		var diff = jsdiff.diffLines("this is crazy2",data);
-//	    	console.log(diff);
 //	});
 }
 
@@ -163,22 +152,19 @@ const util = require('util');
 var sh = require('shelljs');
 var exec_var = 'echo "" > output_diffs';
 var output = sh.exec(exec_var, {silent:true}).stdout;
-
+var diff_command = "diff --ignore-all-space --ignore-blank-lines";
 var copy_groups = [];
 for (var i = 0; i < sources.length; i++) {
 	for (var j = i+1; j < dests.length; j++) {
-		//console.log(names[sources[i]][0]);
-		//console.log(names[dests[j]][0]);
         for(var m=0; m < names[sources[i]].length; m++){
             for(var n=0; n < names[dests[j]].length; n++){
-        		exec_var = 'diff --ignore-all-space --ignore-blank-lines "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
+        		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
         		if (output < 20){
         
-        			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo diff "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+        			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
         			output = sh.exec(exec_var, {silent:true}).stdout;
-        		
-        			exec_var = 'diff --ignore-all-space --ignore-blank-lines "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+        			exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
         			output = sh.exec(exec_var, {silent:true}).stdout;
         			output = "";	
         			
@@ -206,27 +192,27 @@ for (var i = 0; i < sources.length; i++) {
         			if ( dest_index == source_index && source_in_existing && dest_in_existing ){
         				continue;
         			}
-        			console.log("in less than: " + sources[i] + " : " + dests[j]);
+        			//console.log("in less than: " + sources[i] + " : " + dests[j]);
         			if ( source_in_existing && dest_in_existing ){
         				var replace_group = copy_groups[dest_index];
-        				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + replace_group +");");
+        				//console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + replace_group +");");
         				Array.prototype.push.apply(copy_groups[source_index],replace_group);
-        				console.log("copy_groups.splice("+dest_index + "," + 1 +");");
+        				//console.log("copy_groups.splice("+dest_index + "," + 1 +");");
         				copy_groups.splice(dest_index, 1);	
         			} else if ( source_in_existing ){
-        				console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + [dests[j]] + ");");
+        				//console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + [dests[j]] + ");");
         				Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
         			} else if ( dest_in_existing ){
-        				console.log("Array.prototype.push.apply("+copy_groups[dest_index] + "," + [sources[i]] + ");");
+        				//console.log("Array.prototype.push.apply("+copy_groups[dest_index] + "," + [sources[i]] + ");");
         				Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
         
         			} else if ( !source_in_existing && !dest_in_existing ){
-        				console.log("copy_groups.push(["+sources[i] + "]);");
+        				//console.log("copy_groups.push(["+sources[i] + "]);");
         				var tmp = [sources[i]];
         				copy_groups.push([sources[i]]);
-        				console.log(copy_groups.length-1);
+        			    //	console.log(copy_groups.length-1);
         				var num = copy_groups.length-1;
-        				console.log(">>copy_groups["+(copy_groups.length-1)+">>].push("+dests[j]+");");
+        				//console.log(">>copy_groups["+(copy_groups.length-1)+">>].push("+dests[j]+");");
         				copy_groups[copy_groups.length-1].push(dests[j]);
         			} else {
         				throw new Error("copy groups not working");
@@ -251,11 +237,11 @@ var copy_group_string = "echo. >> output_diffs && echo 'Group number: followed b
 for (var i = 0; i < copy_groups.length; i++){
 	copy_group_string += "echo '" + i + ": ";
 	for(var d = 0; d < copy_groups[i].length; d++){	
-		console.log("c grop" + copy_groups[i][d]);
+		//console.log("c grop" + copy_groups[i][d]);
 		copy_group_string += "[" + copy_groups[i][d] + "], ";
 	}
 	copy_group_string = copy_group_string + "' >> output_diffs"
-	console.log(copy_group_string);
+	//console.log(copy_group_string);
 	output = sh.exec(copy_group_string, {silent:true}).stdout;
 	copy_group_string = "";
 }
