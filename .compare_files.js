@@ -95,39 +95,24 @@ function remove(array, element){
 var broken = false;
 var new_array = [];
 
+function getAllExtensionsInArr(arr,extension){
+    for (var i = 0; i < arr.length; i++){
+        if (arr[i].toLowerCase().endsWith(extension)){
+            return arr.filter(function(a){return a.toLowerCase().endsWith(extension);});
+        }
+    }
+}
+
+extensions = ['.js','.html','.txt'];
 for(var key in names){
-    broken = false;
-    new_array = [];
-    for (var i = 0; i < names[key].length; i++){
-        if (names[key][i].toLowerCase().endsWith('.js')){
-            new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.js');});
-            names[key] = new_array;
-            broken = true;  
-            break;  
-        }
+    new_array2 = [];
+    console.log("entered thing"); 
+
+    for(var ex in extensions){
+        new_array2.push(getAllExtensionsInArr(names[key],ex); 
     }
-    if (!broken){
-        new_array = [];
-        for (var i = 0; i < names[key].length; i++){
-            if (names[key][i].toLowerCase().endsWith('.html')){
-                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.html');});
-                names[key] = new_array;
-                broken = true;  
-                break;  
-            }   
-        }
-    }
-    if (!broken){
-        new_array = [];
-        for (var i = 0; i < names[key].length; i++){
-            if (names[key][i].toLowerCase().endsWith('.txt')){
-                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.txt');});
-                names[key] = new_array;
-                broken = true;  
-                break;  
-            }   
-        }
-    }
+
+    names[key] = new_array2;
 }
 
 
@@ -140,6 +125,31 @@ for(var key in names){
 //		var diff = jsdiff.diffLines(data,"this is crazy");
 //		var diff = jsdiff.diffLines("this is crazy2",data);
 //	});
+}
+
+
+
+function hasNewRevision(array,current){
+    var array_of_strings = [];
+    var has_revision = false;
+    var revis = "Revision"
+    var count = 0;
+    for(var arr in array){
+        has_revision = false;
+        array_of_strings = current.split("\\");
+
+    }
+
+    do {
+        has_revision = false;
+        array_of_strings = current.split("\\");\
+        array_of_strings[2].startsWith("Revision " + count);
+        count++; 
+    } while (   );
+
+    for(var i = 0; i < array.length; i++){
+
+    }
 }
 
 
