@@ -131,13 +131,32 @@ for(var key in names){
 
 function hasNewRevision(array,current){
     var array_of_strings = [];
+    var array_str = [];
     var has_revision = false;
-    var revis = "Revision"
+    var revis = "";
+    var tmp = [];
+    var tmp_s = "";
+    var tmp_i = 0;
     var count = 0;
-    for(var arr in array){
-        has_revision = false;
-        array_of_strings = current.split("\\");
+  
+   //current thing  
+        tmp = current.split("\\");
+        console.log( "tmp\[2\]" + tmp[2]);
+        tmp_s = tmp[2];
+        tmp = tmp_s.split(" "); 
+        tmp_s = tmp[1]
+        tmp_i = parseInt(tmp_s, 10); 
+       
 
+ 
+    for(var arr in array){
+        tmp = current.split("\\");
+        console.log( "tmp\[2\]" + tmp[2]);
+        tmp_s = tmp[2];
+        tmp = tmp_s.split(" "); 
+        tmp_s = tmp[1]
+        tmp_i = parseInt(tmp_s, 10); 
+        if(tmp_i < )
     }
 
     do {
