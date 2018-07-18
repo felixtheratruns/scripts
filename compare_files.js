@@ -72,7 +72,7 @@ var text = ''
 
 var names = {};
 for (var i = 0; i < files.length; i++ ){
-	if (files[i] == '.compare_files.js'){
+	if (files[i] == 'compare_files.js'){
 		continue;
 	}	
 	var line = files[i];
@@ -129,7 +129,7 @@ for(var key in names){
 
 
 
-function hasNewRevision(array,current){
+function hasNewRevision(current, array){
     var array_of_strings = [];
     var array_str = [];
     var has_revision = false;
@@ -137,18 +137,16 @@ function hasNewRevision(array,current){
     var tmp = [];
     var tmp_s = "";
     var tmp_i = 0;
-    var count = 0;
-  
-   //current thing  
-        tmp = current.split("\\");
-        console.log( "tmp\[2\]" + tmp[2]);
-        tmp_s = tmp[2];
-        tmp = tmp_s.split(" "); 
-        tmp_s = tmp[1]
-        tmp_i = parseInt(tmp_s, 10); 
-       
+    var current = -1;
 
- 
+    //current thing  
+    tmp = current.split("\\");
+    console.log( "tmp\[2\]" + tmp[2]);
+    tmp_s = tmp[2];
+    tmp = tmp_s.split(" "); 
+    tmp_s = tmp[1]
+    tmp_i = parseInt(tmp_s, 10); 
+    current = tmp_i;
     for(var arr in array){
         tmp = current.split("\\");
         console.log( "tmp\[2\]" + tmp[2]);
@@ -156,19 +154,22 @@ function hasNewRevision(array,current){
         tmp = tmp_s.split(" "); 
         tmp_s = tmp[1]
         tmp_i = parseInt(tmp_s, 10); 
-        if(tmp_i < )
+        if(tmp_i > current ){
+            return true;
+        }
     }
 
-    do {
-        has_revision = false;
-        array_of_strings = current.split("\\");\
-        array_of_strings[2].startsWith("Revision " + count);
-        count++; 
-    } while (   );
-
-    for(var i = 0; i < array.length; i++){
-
-    }
+    return false;
+//    do {
+//        has_revision = false;
+//        array_of_strings = current.split("\\");\
+//        array_of_strings[2].startsWith("Revision " + count);
+//        count++; 
+//    } while (   );
+//
+//    for(var i = 0; i < array.length; i++){
+//
+//    }
 }
 
 
@@ -187,6 +188,20 @@ for (var i = 0; i < sources.length; i++) {
 	for (var j = i+1; j < dests.length; j++) {
         for(var m=0; m < names[sources[i]].length; m++){
             for(var n=0; n < names[dests[j]].length; n++){
+                var source_has_revision = false
+                var dest_has_revision = false
+
+                if (hasNewRevision(names[source[i]][m],names[source[i]])){
+                    source_has_revision = true                                           
+                } 
+                if (hasNewRevision(names[dests[j]][m],names[dests[j]])){
+                    
+                    dest_has_revision = true                                           
+                }
+                if ( source_has_revision && dest_has_revision){
+                    continue; 
+                }
+
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
         		if (output < 20){
@@ -217,31 +232,22 @@ for (var i = 0; i < sources.length; i++) {
         					dest_index = k;	
         				}
         			}
-        
         			if ( dest_index == source_index && source_in_existing && dest_in_existing ){
         				continue;
         			}
-        			//console.log("in less than: " + sources[i] + " : " + dests[j]);
-        			if ( source_in_existing && dest_in_existing ){
+        			if ( (source_in_existing && !source_has_revision ) && dest_in_existing && !dest_has_revision ){
         				var replace_group = copy_groups[dest_index];
-        				//console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + replace_group +");");
         				Array.prototype.push.apply(copy_groups[source_index],replace_group);
-        				//console.log("copy_groups.splice("+dest_index + "," + 1 +");");
         				copy_groups.splice(dest_index, 1);	
-        			} else if ( source_in_existing ){
-        				//console.log("Array.prototype.push.apply("+copy_groups[source_index] + "," + [dests[j]] + ");");
+        			} else if ( source_in_existing && !source_has_revision ){
         				Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
         			} else if ( dest_in_existing ){
-        				//console.log("Array.prototype.push.apply("+copy_groups[dest_index] + "," + [sources[i]] + ");");
         				Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
         
         			} else if ( !source_in_existing && !dest_in_existing ){
-        				//console.log("copy_groups.push(["+sources[i] + "]);");
         				var tmp = [sources[i]];
         				copy_groups.push([sources[i]]);
-        			    //	console.log(copy_groups.length-1);
         				var num = copy_groups.length-1;
-        				//console.log(">>copy_groups["+(copy_groups.length-1)+">>].push("+dests[j]+");");
         				copy_groups[copy_groups.length-1].push(dests[j]);
         			} else {
         				throw new Error("copy groups not working");
