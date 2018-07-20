@@ -109,9 +109,9 @@ for(var key in names){
     console.log("entered thing"); 
 
     for(var ex in extensions){
-        new_array2.push(getAllExtensionsInArr(names[key],ex); 
+        new_array2.push(getAllExtensionsInArr(names[key],ex)); 
     }
-
+    console.log(names[key] + " " + new_array2 );
     names[key] = new_array2;
 }
 
@@ -188,35 +188,36 @@ for (var i = 0; i < sources.length; i++) {
 	for (var j = i+1; j < dests.length; j++) {
         for(var m=0; m < names[sources[i]].length; m++){
             for(var n=0; n < names[dests[j]].length; n++){
-                var source_has_revision = false
-                var dest_has_revision = false
-
-                if (hasNewRevision(names[source[i]][m],names[source[i]])){
-                    source_has_revision = true                                           
-                } 
-                if (hasNewRevision(names[dests[j]][m],names[dests[j]])){
-                    
-                    dest_has_revision = true                                           
-                }
-                if ( source_has_revision && dest_has_revision){
-                    continue; 
-                }
+//                var source_has_revision = false
+//                var dest_has_revision = false
+//
+//                if (hasNewRevision(names[source[i]][m],names[source[i]])){
+//                    source_has_revision = true                                           
+//                } 
+//                if (hasNewRevision(names[dests[j]][m],names[dests[j]])){
+//                    
+//                    dest_has_revision = true                                           
+//                }
+//                if ( source_has_revision && dest_has_revision){
+//                    continue; 
+//                }
 
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
         		if (output < 20){
-                    if ( source_has_revision ){       
-                    
-                        //[fix]
-                    else if ( dest_has_revision ) {
-                        //[fix]
+        		    exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                    //if ( source_has_revision ){       
+                    //
+                    //    //[fix]
+                    //else if ( dest_has_revision ) {
+                    //    //[fix]
 
 
 
-                    
-                    } else {
-        			    exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
-                    }
+                    //
+                    //} else {
+        			//    exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                    //}
         			output = sh.exec(exec_var, {silent:true}).stdout;
         			exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
         			output = sh.exec(exec_var, {silent:true}).stdout;
@@ -245,11 +246,11 @@ for (var i = 0; i < sources.length; i++) {
         			if ( dest_index == source_index && source_in_existing && dest_in_existing ){
         				continue;
         			}
-        			if ( (source_in_existing && !source_has_revision ) && dest_in_existing && !dest_has_revision ){
+        			if ( source_in_existing && dest_in_existing ){
         				var replace_group = copy_groups[dest_index];
         				Array.prototype.push.apply(copy_groups[source_index],replace_group);
         				copy_groups.splice(dest_index, 1);	
-        			} else if ( source_in_existing && !source_has_revision ){
+        			} else if ( source_in_existing ){
         				Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
         			} else if ( dest_in_existing ){
         				Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
