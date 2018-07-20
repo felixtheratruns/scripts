@@ -205,8 +205,18 @@ for (var i = 0; i < sources.length; i++) {
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
         		if (output < 20){
-        
-        			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                    if ( source_has_revision ){       
+                    
+                        //[fix]
+                    else if ( dest_has_revision ) {
+                        //[fix]
+
+
+
+                    
+                    } else {
+        			    exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                    }
         			output = sh.exec(exec_var, {silent:true}).stdout;
         			exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
         			output = sh.exec(exec_var, {silent:true}).stdout;
