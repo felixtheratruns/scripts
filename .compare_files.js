@@ -99,8 +99,9 @@ for(var key in names){
     broken = false;
     new_array = [];
     for (var i = 0; i < names[key].length; i++){
-        if (names[key][i].toLowerCase().endsWith('.js')){
-            new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.js');});
+        var tmp = ".java"
+        if (names[key][i].toLowerCase().endsWith(tmp)){
+            new_array = names[key].filter(function(a){return a.toLowerCase().endsWith(tmp);});
             names[key] = new_array;
             broken = true;  
             break;  
@@ -109,8 +110,9 @@ for(var key in names){
     if (!broken){
         new_array = [];
         for (var i = 0; i < names[key].length; i++){
-            if (names[key][i].toLowerCase().endsWith('.html')){
-                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.html');});
+            var tmp = ".rtf"
+            if (names[key][i].toLowerCase().endsWith(tmp)){
+                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith(tmp);});
                 names[key] = new_array;
                 broken = true;  
                 break;  
@@ -120,8 +122,9 @@ for(var key in names){
     if (!broken){
         new_array = [];
         for (var i = 0; i < names[key].length; i++){
-            if (names[key][i].toLowerCase().endsWith('.txt')){
-                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith('.txt');});
+            var tmp = "Gebretsadik"
+            if (names[key][i].toLowerCase().endsWith(tmp)){
+                new_array = names[key].filter(function(a){return a.toLowerCase().endsWith(tmp);});
                 names[key] = new_array;
                 broken = true;  
                 break;  
