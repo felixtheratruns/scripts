@@ -134,6 +134,7 @@ for(var key in names){
 
 function hasNewRevision(current_str, array){
     console.log("array: " + array);
+    console.log("current_str: " + current_str);
     var array_of_strings = [];
     var array_str = [];
     var has_revision = false;
@@ -146,10 +147,19 @@ function hasNewRevision(current_str, array){
     //current thing  
     tmp = current_str.split("\\");
     tmp = tmp[2];
+    console.log("tmp[2] " + tmp);
     tmp = tmp.split(" "); 
     tmp_s = tmp[1]
+    console.log("tmp[1]/tmp_s " + tmp_s);
     tmp_i = parseInt(tmp_s, 10); 
+    console.log("tmp_i " + tmp_i);
     current = tmp_i;
+    console.log("array: " + array);
+    array = "moo";
+    console.log("array: " + array);
+    for(var arr in array){
+        console.log("arr1: " + arr);
+    }
     for(var arr in array){
         console.log( "arr:" + arr);
         tmp = arr.split("\\");
