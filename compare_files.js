@@ -78,7 +78,6 @@ for (var i = 0; i < files.length; i++ ){
 	}else {
 		names[name] = [line];
 	}
-    console.log("line:" + line);
 }
 
 function remove(array, element){
@@ -112,17 +111,13 @@ function getAllExtensionsInArr(arr,extension){
 var extensions = ['.java','rtf','.txt'];
 for(var key in names){
     new_array2 = [];
-    console.log("entered thing"); 
     for(var ex in extensions){
         new_array2.extend(getAllExtensionsInArr(names[key],extensions[ex])); 
     }
     names[key] = new_array2;
-    console.log("names: " + names[key]);
 }
 
-
 for(var key in names){
-	console.log(key + "1 : " + names[key]);
 //	var absolutePath =path.resolve(names[key][0]);
 //	fs.readFile(absolutePath, 'utf8', function(err, data) {  
 //	    if (err) throw err;
@@ -155,14 +150,12 @@ function hasNewRevision(current_str, array){
     console.log("tmp_i " + tmp_i);
     current = tmp_i;
     console.log("array: " + array);
-    array = "moo";
-    console.log("array: " + array);
-    for(var arr in array){
-        console.log("arr1: " + arr);
-    }
-    for(var arr in array){
-        console.log( "arr:" + arr);
-        tmp = arr.split("\\");
+//    for(var arr in array){
+//        console.log("arr1: " + arr);
+//    }
+    for(var i = 0; i < array.length; i++){
+        console.log( "arr:" + array[i]);
+        tmp = array[i].split("\\");
         console.log( "tmp" + tmp);
         tmp_s = tmp[2];
         console.log( "tmp_s" + tmp_s);
@@ -206,6 +199,9 @@ for (var i = 0; i < sources.length; i++) {
                     dest_has_revision = true                                           
                 }
                 if ( source_has_revision && dest_has_revision){
+                    console.log("has_rev triggered on: " + names[dests[j]]) 
+                    console.log("has_rev triggered: " + names[sources[j][m]]) 
+                    console.log("has_rev triggered: " + names[dests[j][n]]) 
                     continue; 
                 }
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
