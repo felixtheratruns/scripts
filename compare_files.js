@@ -150,6 +150,7 @@ for (var i = 0; i < sources.length; i++) {
         		output = sh.exec(exec_var, {silent:true}).stdout;
 
         		if (output < diff_line_minimum){
+
                     if( source_has_revision && dest_has_revision ){
                         //console.log("both have revisions");                            
                     } else if ( source_has_revision ){       
