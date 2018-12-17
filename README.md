@@ -1,14 +1,14 @@
 # compare_files.py
 ## Description:
-Compares files in unziped schoology "download all" assignment folder. Folder should have a structure like:
-folde_name\student, name - 0AAA119SP00084\Revision 1 - On Time\student_submission.extension
-folde_name\student, name2 - 0AAA119SP00084\Revision 1 - Late\student_submission.extension
+Compares files in unziped schoology "download all" assignment folder. Folder should have a structure like:  
+folde_name\student, name - 0AAA119SP00084\Revision 1 - On Time\student_submission.extension  
+folde_name\student, name2 - 0AAA119SP00084\Revision 1 - Late\student_submission.extension  
 
 ## Instructions
-Change the following line in the program to change the minimum lines difference an assignment can have before it is flaged as copied:
+Change the following line in the program to change the minimum lines difference an assignment can have before it is flaged as copied:  
 const diff_line_minimum = 20;
 
-Change the following line in the program to change the list of file extensions the program compares:
+Change the following line in the program to change the list of file extensions the program compares:  
 const extensions = ['.java','rtf','.txt'];
 
 ## Usage: 
