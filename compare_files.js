@@ -128,8 +128,6 @@ for(var key in names){
 }
 
 function hasNewRevision(current_str, array){
-    console.log("array: " + array);
-    console.log("current_str: " + current_str);
     var array_of_strings = [];
     var array_str = [];
     var has_revision = false;
@@ -142,29 +140,17 @@ function hasNewRevision(current_str, array){
     //current thing  
     tmp = current_str.split("\\");
     tmp = tmp[2];
-    console.log("tmp[2] " + tmp);
     tmp = tmp.split(" "); 
     tmp_s = tmp[1]
-    console.log("tmp[1]/tmp_s " + tmp_s);
     tmp_i = parseInt(tmp_s, 10); 
-    console.log("tmp_i " + tmp_i);
     current = tmp_i;
-    console.log("array: " + array);
-//    for(var arr in array){
-//        console.log("arr1: " + arr);
-//    }
     for(var i = 0; i < array.length; i++){
-        console.log( "arr:" + array[i]);
         tmp = array[i].split("\\");
-        console.log( "tmp" + tmp);
         tmp_s = tmp[2];
-        console.log( "tmp_s" + tmp_s);
         tmp = tmp_s.split(" "); 
         tmp_s = tmp[1]
         tmp_i = parseInt(tmp_s, 10); 
-        console.log(current + " : " + tmp_i);
         if(tmp_i > current ){
-            console.log( "tmp_s" + tmp_i);
             return true;
         }
     }
@@ -190,31 +176,36 @@ for (var i = 0; i < sources.length; i++) {
                 var source_has_revision = false
                 var dest_has_revision = false
 
-                console.log("has_rev: " + names[sources[i]]) 
+
+                console.log(" " + names[sources[i]][m]);
                 if (hasNewRevision(names[sources[i]][m],names[sources[i]])){
                     source_has_revision = true                                           
+                    console.log("source has rev triggered");
                 }
-                console.log("has_rev: " + names[dests[j]]) 
                 if (hasNewRevision(names[dests[j]][n],names[dests[j]])){
                     dest_has_revision = true                                           
+                    console.log("dest has rev triggered");
                 }
+                
+
                 if ( source_has_revision && dest_has_revision){
-                    console.log("has_rev triggered on: " + names[dests[j]]) 
-                    console.log("has_rev triggered: " + names[sources[j][m]]) 
-                    console.log("has_rev triggered: " + names[dests[j][n]]) 
                     continue; 
                 }
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
+                console.log(">" + names[sources[i]][m] + " --- " + names[dests[j]][n] );
+
         		if (output < 20){
                     if( source_has_revision && dest_has_revision ){
-                        console.log("both have revisions");
+                        console.log("both have revisions");                            
                     } else if ( source_has_revision ){       
                         console.log("source has revisions");
                     } else if ( dest_has_revision ) {
-                        console.log("source has revisions");
+                        console.log("dest has revisions");
                     } else {
+
                     }
+
         			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
         			output = sh.exec(exec_var, {silent:true}).stdout;
         			exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
@@ -230,13 +221,13 @@ for (var i = 0; i < sources.length; i++) {
         					console.log(a + "copy_group: " + copy_groups[k][a]);		
         				}
         				if(copy_groups[k].indexOf(sources[i]) > -1){
-        					console.log(sources[i] + " is in group ");
+        					console.log(sources[i] + "dest is in group ");
         					source_in_existing = true;	
         					source_index = k; 
         				} 
         					
         				if(copy_groups[k].indexOf(dests[j]) > -1 ){
-        					console.log(dests[j] + " is in group ");
+        					console.log(dests[j] + "dest is in group ");
         					dest_in_existing = true;
         					dest_index = k;	
         				}
