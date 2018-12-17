@@ -2,7 +2,7 @@
 ## Description:
 Compares files in unziped schoology "download all" assignment folder. Here's an example of what your folder structure might look like:
 folde_name\student, name - 0AAA119SP00084\Revision 1 - On Time\student_submission.extension  
-folde_name\student, name - 0AAA119SP00114\Revision 1 - Late\student_submission.extension  
+folde_name\student, name - 0AAA119SP00114\Revision 2 - Late\student_submission.extension  
 folde_name\Smith, Joe - 0AAA119SP00134\Revision 1 - Late\student_submission.extension  
 
 This has been tested on Windows 7 running the following version of cygwin with the linux diff utility installed:  
