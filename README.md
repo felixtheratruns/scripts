@@ -6,7 +6,7 @@ folde_name\student, name - 0AAA119SP00114\Revision 1 - Late\student_submission.e
 folde_name\Smith, Joe - 0AAA119SP00134\Revision 1 - Late\student_submission.extension  
 
 This has been tested on Windows 7 running the following version of cygwin with the linux diff utility installed:  
-C:\Windows\SysWOW64>uname -r
+C:\Windows\SysWOW64>uname -r   
 2.10.0(0.325/5/3)
 
 ## Instructions
