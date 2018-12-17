@@ -20,44 +20,20 @@
 //   can be used for more general purposes.
 //   Author: Joel Cambon
 
+//minmum number of lines below which the program will flag the person as having copied
+const diff_line_minimum = 20;
+const extensions = ['.java','rtf','.txt'];
+
 var myArgs = process.argv.slice(2);
 
 const fs = require('fs')
 const path = require('path')
 const dirs = p => fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
-
-module.exports = function move(oldPath, newPath, callback) {
-
-    fs.rename(oldPath, newPath, function (err) {
-        if (err) {
-            if (err.code === 'EXDEV') {
-                copy();
-            } else {
-                callback(err);
-            }
-            return;
-        }
-        callback();
-    });
-
-    function copy() {
-        var readStream = fs.createReadStream(oldPath);
-        var writeStream = fs.createWriteStream(newPath);
-        readStream.on('error', callback);
-        writeStream.on('error', callback);
-        readStream.on('close', function () {
-            fs.unlink(oldPath, callback);
-        });
-        readStream.pipe(writeStream);
-    }
-}
-
 const FileSystem = require('fs');
-const Path = require('path');
 
 function readDirR(dir) {
     return FileSystem.statSync(dir).isDirectory()
-        ? Array.prototype.concat(...FileSystem.readdirSync(dir).map(f => readDirR(Path.join(dir, f))))
+        ? Array.prototype.concat(...FileSystem.readdirSync(dir).map(f => readDirR(path.join(dir, f))))
         : dir;
 }
 
@@ -67,9 +43,6 @@ var text = ''
 
 var names = {};
 for (var i = 0; i < files.length; i++ ){
-	if (files[i] == 'compare_files.js'){
-		continue;
-	}	
 	var line = files[i];
  	var name = line.match(/^[^-]*[^ -]/)[0];
 	var name = name.substr(name.lastIndexOf('\\') + 1);
@@ -97,8 +70,6 @@ Array.prototype.extend = function (other_array) {
     }
 }
 
-var broken = false;
-var new_array = [];
 
 function getAllExtensionsInArr(arr,extension){
     for (var i = 0; i < arr.length; i++){
@@ -108,36 +79,22 @@ function getAllExtensionsInArr(arr,extension){
     }
 }
 
-var extensions = ['.java','rtf','.txt'];
 for(var key in names){
-    new_array2 = [];
+    new_array = [];
     for(var ex in extensions){
-        new_array2.extend(getAllExtensionsInArr(names[key],extensions[ex])); 
+        new_array.extend(getAllExtensionsInArr(names[key],extensions[ex])); 
     }
-    names[key] = new_array2;
-}
-
-for(var key in names){
-//	var absolutePath =path.resolve(names[key][0]);
-//	fs.readFile(absolutePath, 'utf8', function(err, data) {  
-//	    if (err) throw err;
-//		var diff = jsdiff.diffLines(data,data);
-//		var diff = jsdiff.diffLines(data,"this is crazy");
-//		var diff = jsdiff.diffLines("this is crazy2",data);
-//	});
+    names[key] = new_array;
 }
 
 function hasNewRevision(current_str, array){
-    var array_of_strings = [];
-    var array_str = [];
     var has_revision = false;
-    var revis = "";
     var tmp = [];
     var tmp_s = "";
     var tmp_i = 0;
     var current = -1;
 
-    //current thing  
+
     tmp = current_str.split("\\");
     tmp = tmp[2];
     tmp = tmp.split(" "); 
@@ -165,7 +122,7 @@ var array_out = [];
 const util = require('util');
 
 var sh = require('shelljs');
-var exec_var = 'echo "" > output_diffs';
+var exec_var = 'echo "START OF FILE" > output_diffs';
 var output = sh.exec(exec_var, {silent:true}).stdout;
 var diff_command = "diff --ignore-all-space --ignore-blank-lines";
 var copy_groups = [];
@@ -177,31 +134,28 @@ for (var i = 0; i < sources.length; i++) {
                 var dest_has_revision = false
 
 
-                console.log(" " + names[sources[i]][m]);
                 if (hasNewRevision(names[sources[i]][m],names[sources[i]])){
                     source_has_revision = true                                           
-                    console.log("source has rev triggered");
                 }
                 if (hasNewRevision(names[dests[j]][n],names[dests[j]])){
                     dest_has_revision = true                                           
-                    console.log("dest has rev triggered");
                 }
                 
-
+                //this prevents the program from comparing old revisions of assignments with other old revisions
+                //only latest revisions are compared with each other and with older revisions
                 if ( source_has_revision && dest_has_revision){
                     continue; 
                 }
         		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
         		output = sh.exec(exec_var, {silent:true}).stdout;
-                console.log(">" + names[sources[i]][m] + " --- " + names[dests[j]][n] );
 
-        		if (output < 20){
+        		if (output < diff_line_minimum){
                     if( source_has_revision && dest_has_revision ){
-                        console.log("both have revisions");                            
+                        //console.log("both have revisions");                            
                     } else if ( source_has_revision ){       
-                        console.log("source has revisions");
+                        //console.log("source has revisions");
                     } else if ( dest_has_revision ) {
-                        console.log("dest has revisions");
+                        //console.log("destination has revisions");
                     } else {
 
                     }
@@ -221,13 +175,13 @@ for (var i = 0; i < sources.length; i++) {
         					console.log(a + "copy_group: " + copy_groups[k][a]);		
         				}
         				if(copy_groups[k].indexOf(sources[i]) > -1){
-        					console.log(sources[i] + "dest is in group ");
+        					console.log(sources[i] + "source is in group ");
         					source_in_existing = true;	
         					source_index = k; 
         				} 
         					
         				if(copy_groups[k].indexOf(dests[j]) > -1 ){
-        					console.log(dests[j] + "dest is in group ");
+        					console.log(dests[j] + "destination is in group ");
         					dest_in_existing = true;
         					dest_index = k;	
         				}
