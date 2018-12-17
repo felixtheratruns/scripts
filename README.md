@@ -1,4 +1,4 @@
-# compare_files.py
+# compare_files.js
 ## Description:
 Compares files in unziped schoology "download all" assignment folder. Here's an example of what your folder structure might look like:
 folde_name\student, name - 0AAA119SP00084\Revision 1 - On Time\student_submission.extension  
