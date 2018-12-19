@@ -20,8 +20,9 @@
 //   can be used for more general purposes.
 //   Author: Joel Cambon
 
-//minmum number of lines below which the program will flag the person as having copied
+//minmum number of lines below which the program will flag the person as having copied:
 const diff_line_minimum = 20;
+//extensions of file that will be compared:
 const extensions = ['.java','rtf','.txt'];
 
 var myArgs = process.argv.slice(2);
