@@ -2,15 +2,15 @@
 //   ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 //   нThis program is free software: you can redistribute it and/or modify н
 //   нit under the terms of the GNU General Public License as published by н
-//   нthe Free Software Foundation, either version 3 of the License, or	   н
-//   н(at your option) any later version.				                   н
-//   н									                                   н
+//   нthe Free Software Foundation, either version 3 of the License, or    н
+//   н(at your option) any later version.                                  н
+//   н                                                                     н
 //   нThis program is distributed in the hope that it will be useful,      н
 //   нbut WITHOUT ANY WARRANTY; without even the implied warranty of       н
 //   нMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        н
-//   нGNU General Public License for more details.			               н
-//   н									                                   н
-//   нYou should have received a copy of the GNU General Public License	   н
+//   нGNU General Public License for more details.                         н
+//   н                                                                     н
+//   нYou should have received a copy of the GNU General Public License    н
 //   нalong with this program.  If not, see <http://www.gnu.org/licenses/>.н
 //   ннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннннн
 //
@@ -167,26 +167,26 @@ function compareRevisions(names, sources, dests, i, j) {
                 output = sh.exec(exec_var, {silent:true}).stdout;
                 exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
                 output = sh.exec(exec_var, {silent:true}).stdout;
-                output = "";	
+                output = ""; 
 
-                var source_in_existing = false;		
-                var source_index = 0;	
-                var dest_in_existing = false;			
-                var dest_index = 0;	
-                for (var k = 0; k < copy_groups.length; k++){		
+                var source_in_existing = false;  
+                var source_index = 0; 
+                var dest_in_existing = false;   
+                var dest_index = 0; 
+                for (var k = 0; k < copy_groups.length; k++){  
                     for (var a = 0; a < copy_groups[k].length; a++){
-                        console.log(a + "copy_group: " + copy_groups[k][a]);		
+                        console.log(a + "copy_group: " + copy_groups[k][a]);  
                     }
                     if(copy_groups[k].indexOf(sources[i]) > -1){
                         console.log(sources[i] + "source is in group ");
-                        source_in_existing = true;	
+                        source_in_existing = true; 
                         source_index = k; 
                     } 
 
                     if(copy_groups[k].indexOf(dests[j]) > -1 ){
                         console.log(dests[j] + "destination is in group ");
                         dest_in_existing = true;
-                        dest_index = k;	
+                        dest_index = k; 
                     }
                 }
                 if ( dest_index == source_index && source_in_existing && dest_in_existing ){
@@ -195,9 +195,9 @@ function compareRevisions(names, sources, dests, i, j) {
                 if ( source_in_existing && dest_in_existing ){
                     var replace_group = copy_groups[dest_index];
                     Array.prototype.push.apply(copy_groups[source_index],replace_group);
-                    copy_groups.splice(dest_index, 1);	
+                    copy_groups.splice(dest_index, 1); 
                 } else if ( source_in_existing ){
-                    Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
+                    Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);  
                 } else if ( dest_in_existing ){
                     Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
                 } else if ( !source_in_existing && !dest_in_existing ){
@@ -210,7 +210,7 @@ function compareRevisions(names, sources, dests, i, j) {
                 }
 
             }
-        }				
+        }    
     }
 }
 
@@ -226,7 +226,7 @@ for (var i = 0; i < copy_groups.length; i++){
     console.log("new group: ");
     for(var c = 0; c < copy_groups[i].length; c++){
         process.stdout.write(copy_groups[i][c]);
-    }	
+    } 
 }
 
 
@@ -234,7 +234,7 @@ for (var i = 0; i < copy_groups.length; i++){
 var copy_group_string = "echo. >> output_diffs && echo 'Group number: followed by people in group' >> output_diffs && ";
 for (var i = 0; i < copy_groups.length; i++){
     copy_group_string += "echo '" + i + ": ";
-    for(var d = 0; d < copy_groups[i].length; d++){	
+    for(var d = 0; d < copy_groups[i].length; d++){ 
         //console.log("c grop" + copy_groups[i][d]);
         copy_group_string += "[" + copy_groups[i][d] + "], ";
     }
