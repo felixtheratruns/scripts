@@ -130,7 +130,7 @@ var copy_groups = [];
 
 
 
-function compareRevisions(names, sources, dests) {
+function compareRevisions(names, sources, dests, i, j) {
     for(var m=0; m < names[sources[i]].length; m++){
         for(var n=0; n < names[dests[j]].length; n++){
             var source_has_revision = false
@@ -200,7 +200,8 @@ function compareRevisions(names, sources, dests) {
             		Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
             	} else if ( dest_in_existing ){
             		Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
-            	} else if ( !source_in_existing ){
+            	} else if ( !source_in_existing && !dest_in_existing ){
+                    
             		var tmp = [sources[i]];
             		copy_groups.push([sources[i]]);
             		var num = copy_groups.length-1;
@@ -217,7 +218,7 @@ function compareRevisions(names, sources, dests) {
 
 for (var i = 0; i < sources.length; i++) {
 	for (var j = i+1; j < dests.length; j++) {
-        compareRevisions(names, sources, dests);
+        compareRevisions(names, sources, dests, i, j);
 	}
 }
 

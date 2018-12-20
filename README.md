@@ -1,25 +1,25 @@
 # compare_files.js
 ## Description:
-Compares files in unziped schoology "download all" assignment folder. Here's an example of what your folder structure might look like:
+Compares files in unziped schoology "download all" assignment folder. Here's an example of what your folder structure might look like:  
 folde_name\student, name - 0AAA119SP00084\Revision 1 - On Time\student_submission.extension  
 folde_name\student, name - 0AAA119SP00114\Revision 2 - Late\student_submission.extension  
 folde_name\Smith, Joe - 0AAA119SP00134\Revision 1 - Late\student_submission.extension  
-
-This has been tested on Windows 7 running the following version of cygwin with the linux diff utility installed:  
+   
+This has been tested on Windows 7 running the following version of cygwin with the linux diff utility installed:   
 C:\Windows\SysWOW64>uname -r   
-2.10.0(0.325/5/3)
+2.10.0(0.325/5/3)  
 
 ## Instructions
 Change the following line in the program to change the minimum lines difference an assignment can have before it is flaged as copied:  
 const diff_line_minimum = 20;
 
 Change the following line in the program to change the list of file extensions the program compares:  
-const extensions = ['.java','rtf','.txt'];
+const extensions = ['.java','rtf','.txt']; 
 
 The program will write a file called: "output_diffs" and will notify you when it finds a group with console.log in stdout. 
 
 ## Usage: 
-node compare_files.js [schoology folder]
+node compare_files.js [schoology folder]  
 
 
 # add_file_to_hosts.js
