@@ -42,14 +42,14 @@ files = readDirR(myArgs[0]);
 
 var names = {};
 for (var i = 0; i < files.length; i++ ){
-	var line = files[i];
- 	var name = line.match(/^[^-]*[^ -]/)[0];
-	var name = name.substr(name.lastIndexOf('\\') + 1);
-	if(name in names){
-		names[name].push(line);
-	}else {
-		names[name] = [line];
-	}
+    var line = files[i];
+    var name = line.match(/^[^-]*[^ -]/)[0];
+    var name = name.substr(name.lastIndexOf('\\') + 1);
+    if(name in names){
+        names[name].push(line);
+    }else {
+        names[name] = [line];
+    }
 }
 
 function remove(array, element){
@@ -142,16 +142,16 @@ function compareRevisions(names, sources, dests, i, j) {
             if (hasNewerRevision(names[dests[j]][n],names[dests[j]])){
                 dest_has_revision = true                                           
             }
-            
+
             //this prevents the program from comparing old revisions of assignments with other old revisions
             //only latest revisions are compared with each other and with older revisions
             if ( source_has_revision && dest_has_revision){
                 continue; 
             }
-    		exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
-    		output = sh.exec(exec_var, {silent:true}).stdout;
+            exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" | wc -l'
+            output = sh.exec(exec_var, {silent:true}).stdout;
 
-    		if (output < diff_line_minimum){
+            if (output < diff_line_minimum){
 
                 if( source_has_revision && dest_has_revision ){
                     //console.log("both have revisions");                            
@@ -163,84 +163,83 @@ function compareRevisions(names, sources, dests, i, j) {
 
                 }
 
-    			exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
-    			output = sh.exec(exec_var, {silent:true}).stdout;
-    			exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
-    			output = sh.exec(exec_var, {silent:true}).stdout;
-    			output = "";	
-             	
+                exec_var = 'echo. >> output_diffs && echo. >> output_diffs && echo DIFF >> output_diffs && echo ' + names[sources[i]][m] + ' >> output_diffs && echo ' + names[dests[j]][n] + ' >> output_diffs && echo ' + diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                output = sh.exec(exec_var, {silent:true}).stdout;
+                exec_var = diff_command + ' "' + names[sources[i]][m] + '" "' + names[dests[j]][n] + '" >> output_diffs';
+                output = sh.exec(exec_var, {silent:true}).stdout;
+                output = "";	
+
                 var source_in_existing = false;		
-            	var source_index = 0;	
-            	var dest_in_existing = false;			
-            	var dest_index = 0;	
-            	for (var k = 0; k < copy_groups.length; k++){		
-            		for (var a = 0; a < copy_groups[k].length; a++){
-            			console.log(a + "copy_group: " + copy_groups[k][a]);		
-            		}
-            		if(copy_groups[k].indexOf(sources[i]) > -1){
-            			console.log(sources[i] + "source is in group ");
-            			source_in_existing = true;	
-            			source_index = k; 
-            		} 
-            			
-            		if(copy_groups[k].indexOf(dests[j]) > -1 ){
-            			console.log(dests[j] + "destination is in group ");
-            			dest_in_existing = true;
-            			dest_index = k;	
-            		}
-            	}
-            	if ( dest_index == source_index && source_in_existing && dest_in_existing ){
-            		continue;
-            	}
-            	if ( source_in_existing && dest_in_existing ){
-            		var replace_group = copy_groups[dest_index];
-            		Array.prototype.push.apply(copy_groups[source_index],replace_group);
-            		copy_groups.splice(dest_index, 1);	
-            	} else if ( source_in_existing ){
-            		Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
-            	} else if ( dest_in_existing ){
-            		Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
-            	} else if ( !source_in_existing && !dest_in_existing ){
-                    
-            		var tmp = [sources[i]];
-            		copy_groups.push([sources[i]]);
-            		var num = copy_groups.length-1;
-            		copy_groups[copy_groups.length-1].push(dests[j]);
-            	} else {
-            		throw new Error("copy groups not working");
-            	}
-    
+                var source_index = 0;	
+                var dest_in_existing = false;			
+                var dest_index = 0;	
+                for (var k = 0; k < copy_groups.length; k++){		
+                    for (var a = 0; a < copy_groups[k].length; a++){
+                        console.log(a + "copy_group: " + copy_groups[k][a]);		
+                    }
+                    if(copy_groups[k].indexOf(sources[i]) > -1){
+                        console.log(sources[i] + "source is in group ");
+                        source_in_existing = true;	
+                        source_index = k; 
+                    } 
+
+                    if(copy_groups[k].indexOf(dests[j]) > -1 ){
+                        console.log(dests[j] + "destination is in group ");
+                        dest_in_existing = true;
+                        dest_index = k;	
+                    }
+                }
+                if ( dest_index == source_index && source_in_existing && dest_in_existing ){
+                    continue;
+                }
+                if ( source_in_existing && dest_in_existing ){
+                    var replace_group = copy_groups[dest_index];
+                    Array.prototype.push.apply(copy_groups[source_index],replace_group);
+                    copy_groups.splice(dest_index, 1);	
+                } else if ( source_in_existing ){
+                    Array.prototype.push.apply(copy_groups[source_index],[dests[j]]);		
+                } else if ( dest_in_existing ){
+                    Array.prototype.push.apply(copy_groups[dest_index],[sources[i]]);
+                } else if ( !source_in_existing && !dest_in_existing ){
+                    var tmp = [sources[i]];
+                    copy_groups.push([sources[i]]);
+                    var num = copy_groups.length-1;
+                    copy_groups[copy_groups.length-1].push(dests[j]);
+                } else {
+                    throw new Error("copy groups not working");
+                }
+
             }
-    	}				
+        }				
     }
 }
 
 
 for (var i = 0; i < sources.length; i++) {
-	for (var j = i+1; j < dests.length; j++) {
+    for (var j = i+1; j < dests.length; j++) {
         compareRevisions(names, sources, dests, i, j);
-	}
+    }
 }
 
 
 for (var i = 0; i < copy_groups.length; i++){
-	console.log("new group: ");
-	for(var c = 0; c < copy_groups[i].length; c++){
-		process.stdout.write(copy_groups[i][c]);
-	}	
+    console.log("new group: ");
+    for(var c = 0; c < copy_groups[i].length; c++){
+        process.stdout.write(copy_groups[i][c]);
+    }	
 }
 
 
 
 var copy_group_string = "echo. >> output_diffs && echo 'Group number: followed by people in group' >> output_diffs && ";
 for (var i = 0; i < copy_groups.length; i++){
-	copy_group_string += "echo '" + i + ": ";
-	for(var d = 0; d < copy_groups[i].length; d++){	
-		//console.log("c grop" + copy_groups[i][d]);
-		copy_group_string += "[" + copy_groups[i][d] + "], ";
-	}
-	copy_group_string = copy_group_string + "' >> output_diffs"
-	//console.log(copy_group_string);
-	output = sh.exec(copy_group_string, {silent:true}).stdout;
-	copy_group_string = "";
+    copy_group_string += "echo '" + i + ": ";
+    for(var d = 0; d < copy_groups[i].length; d++){	
+        //console.log("c grop" + copy_groups[i][d]);
+        copy_group_string += "[" + copy_groups[i][d] + "], ";
+    }
+    copy_group_string = copy_group_string + "' >> output_diffs"
+    //console.log(copy_group_string);
+    output = sh.exec(copy_group_string, {silent:true}).stdout;
+    copy_group_string = "";
 }
