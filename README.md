@@ -111,4 +111,4 @@ git submodule update
 git submodule foreach git checkout master   
 git submodule foreach git pull origin master  
 
- 
+https://stackoverflow.com/questions/18770545/why-is-my-git-submodule-head-detached-from-master 
